@@ -1,11 +1,12 @@
 import React from 'react'
 
-function DataDisplay ({data}){
+function DataDisplay ({data, edithandler, deletehandler, openFormHandle}){
     
     return(
     
         <div>
             <h2>Data Display</h2>
+            <button onClick={openFormHandle}>Add Data</button>
         <table>
                 <thead>
                     <tr>
@@ -22,8 +23,8 @@ function DataDisplay ({data}){
                             <td>{item.email}</td>
                             <td>{item.contact}</td>
                             <td>
-                                <button>Edit</button>
-                                <button>Delete</button>
+                                <button onClick={() => edithandler(item, index)}>Edit</button>
+                                <button onClick={()=> deletehandler(index)}>Delete</button>
                             </td>
                         </tr>
                     ))}

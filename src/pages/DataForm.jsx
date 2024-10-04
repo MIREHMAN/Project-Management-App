@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
 
-function DataForm({setData}) {
+function DataForm({setData, editItem, seteditItem, onClose}) {
     const[name,setName]=useState('');
     const[email,setEmail]=useState('');
     const[contact,setContact]=useState('');
     
+    if (editItem) {
+        setName(editItem.item.name);
+        setEmail(editItem.item.email);
+        setContact(editItem.item.contact);
+      }
     
     function handleSubmit(e){
         e.preventDefault();
@@ -16,7 +21,17 @@ function DataForm({setData}) {
         setName('');
         setEmail('');
         setContact('');
-        setData((prevData) => [...prevData, newData]);
+        
+        if(editItem) {
+            setData((prevData) =>
+                prevData.map((item, i) =>
+                  i === editItem.index ? newData : item
+                )
+              );
+              seteditItem(null);
+        }
+        else
+        setData( (prevData) => [...prevData, newData]);
     }
     
   return (
@@ -30,8 +45,9 @@ function DataForm({setData}) {
                 <input type="email"value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
                 <label>Contact</label>
                 <input type='number'value={contact} onChange={(e)=>{setContact(e.target.value)}}/>
-                <button type='submit' onClick={handleSubmit} disabled={!name || !email || !contact}>Add Data</button>
+                <button type='submit' onClick={handleSubmit} disabled={!name || !email || !contact}>{editItem ? 'Update Data' : 'Add Data'}</button>
             </form>
+            <button onClick={onClose}>Close</button>
         </div>
         
             
