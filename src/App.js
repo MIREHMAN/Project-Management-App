@@ -1,23 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from 'react'
+import DataDisplay from './pages/DataDisplay';
+import DataForm from './pages/DataForm';
+
 
 function App() {
+  const[data,setData]=useState([])
+  const [editItem,seteditItem]=useState(null);
+  
+  const edithandler =(item,index)=>{
+    seteditItem({ item, index });
+  }
+  const deletehandler =(index)=>{
+    setData((data.filter((item, i) => i !== index)))
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <DataForm setData={setData} editItem={editItem} seteditItem={seteditItem}/>
+      <DataDisplay data={data} edithandler={edithandler} deletehandler={deletehandler}/>
+      
     </div>
   );
 }
