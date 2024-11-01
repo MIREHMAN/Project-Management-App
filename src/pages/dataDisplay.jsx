@@ -1,39 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
-  Box, 
   Button, 
-  Dialog, 
   Table, 
   TableBody, 
   TableCell, 
   TableHead, 
-  TableRow, 
-  Typography 
+  TableRow 
 } from '@mui/material';
-import DataForm from './DataForm';
 
-function DataDisplay({ data, setData, editItem, setEditItem }) {
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setEditItem(null);
-  };
-
-  const editHandler = (item, index) => {
-    setEditItem({ item, index });
-    handleOpen();
-  };
-
-  const deleteHandler = (index) => {
-    setData((prevData) => prevData.filter((_, i) => i !== index));
-  };
-
+function DataDisplay({
+  data,
+  editHandler,
+  deleteHandler,
+  openFormHandle
+}) {
   return (
-    <Box sx={{ width: '800px', margin: 'auto', padding: 2 }}>
-      <Typography variant="h5">Data Display</Typography>
-      <Button variant="contained" onClick={handleOpen}>
+    <div>
+      <Button variant="contained" onClick={openFormHandle}>
         Add Data
       </Button>
       <Table>
@@ -59,15 +42,7 @@ function DataDisplay({ data, setData, editItem, setEditItem }) {
           ))}
         </TableBody>
       </Table>
-      <Dialog open={open} onClose={handleClose}>
-        <DataForm 
-          setData={setData} 
-          editItem={editItem} 
-          setEditItem={setEditItem} 
-          onClose={handleClose} 
-        />
-      </Dialog>
-    </Box>
+    </div>
   );
 }
 

@@ -25,14 +25,14 @@ function App() {
 
   return (
     <Box sx={{ width: '100%', margin: 'auto', padding: 2 }}>
-      {openForm && (
-        <DataForm
-          setData={setData}
-          editItem={editItem}
-          setEditItem={setEditItem}
-          onClose={closeFormHandle}
-        />
-      )}
+      <DataForm
+        data={data}
+        setData={setData}
+        editItem={editItem}
+        setEditItem={setEditItem}
+        open={openForm}
+        onClose={closeFormHandle}
+      />
       <DataDisplay
         data={data}
         editHandler={editHandler}
