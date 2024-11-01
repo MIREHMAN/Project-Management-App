@@ -1,41 +1,45 @@
-import './App.css';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
 import DataDisplay from './pages/DataDisplay';
 import DataForm from './pages/DataForm';
 
-
 function App() {
-  const[data,setData]=useState([])
-  const [editItem,seteditItem]=useState(null);
-  const[isFormOpen,setIsFormOpen]=useState(false);
+  const [data, setData] = useState([]);
+  const [editItem, setEditItem] = useState(null);
+  const [openForm, setOpenForm] = useState(false);
 
-  const openFormHandle = () => {
-    setIsFormOpen(true);
-  };
-
+  const openFormHandle = () => setOpenForm(true);
   const closeFormHandle = () => {
-    setIsFormOpen(false);
+    setOpenForm(false);
+    setEditItem(null);
   };
-  
-  const edithandler =(item,index)=>{
-    seteditItem({ item, index });
-  }
-  const deletehandler =(index)=>{
-    setData((data.filter((item, i) => i !== index)))
-  }
+
+  const editHandler = (item, index) => {
+    setEditItem({ item, index });
+    openFormHandle();
+  };
+
+  const deleteHandler = (index) => {
+    setData((prevData) => prevData.filter((_, i) => i !== index));
+  };
+
   return (
-    <div className="App">
-      {isFormOpen && (
+    <Box sx={{ width: '100%', margin: 'auto', padding: 2 }}>
+      {openForm && (
         <DataForm
           setData={setData}
           editItem={editItem}
-          seteditItem={seteditItem}
+          setEditItem={setEditItem}
           onClose={closeFormHandle}
         />
       )}
-      <DataDisplay data={data} edithandler={edithandler} deletehandler={deletehandler}  openFormHandle={openFormHandle}/>
-      
-    </div>
+      <DataDisplay
+        data={data}
+        editHandler={editHandler}
+        deleteHandler={deleteHandler}
+        openFormHandle={openFormHandle}
+      />
+    </Box>
   );
 }
 

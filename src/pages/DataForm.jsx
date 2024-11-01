@@ -1,59 +1,99 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import { 
+  Button, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle, 
+  TextField 
+} from '@mui/material';
 
-function DataForm({setData, editItem, seteditItem, onClose}) {
-    const[name,setName]=useState('');
-    const[email,setEmail]=useState('');
-    const[contact,setContact]=useState('');
-    
+function DataForm({ setData, editItem, setEditItem, onClose }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [contact, setContact] = useState('');
+  
+
+  useEffect(() => {
     if (editItem) {
-        setName(editItem.item.name);
-        setEmail(editItem.item.email);
-        setContact(editItem.item.contact);
-      }
-    
-    function handleSubmit(e){
-        e.preventDefault();
-        const newData={
-            name: name,
-            email: email,
-            contact: contact
-        };
-        setName('');
-        setEmail('');
-        setContact('');
-        
-        if(editItem) {
-            setData((prevData) =>
-                prevData.map((item, i) =>
-                  i === editItem.index ? newData : item
-                )
-              );
-              seteditItem(null);
-        }
-        else
-        setData( (prevData) => [...prevData, newData]);
+      setName(editItem.item.name);
+      setEmail(editItem.item.email);
+      setContact(editItem.item.contact);
     }
-    
-  return (
-    <div>
-        <div>
-            <h1>Add Data</h1>
-            <form>
-                <label>Name</label>
-                <input type="text" value={name} onChange={(e)=>{setName(e.target.value)}}/>
-                <label>Email</label>
-                <input type="email"value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
-                <label>Contact</label>
-                <input type='number'value={contact} onChange={(e)=>{setContact(e.target.value)}}/>
-                <button type='submit' onClick={handleSubmit} disabled={!name || !email || !contact}>{editItem ? 'Update Data' : 'Add Data'}</button>
-            </form>
-            <button onClick={onClose}>Close</button>
-        </div>
-        
-            
-</div>
-                )
-            }
-            
+  }, [editItem]);
 
-export default DataForm
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newData = { name, email, contact };
+    setName('');
+    setEmail('');
+    setContact('');
+
+    if (editItem) {
+      setData((prevData) =>
+        prevData.map((item, i) => (i === editItem.index ? newData : item))
+      );
+      setEditItem(null);
+    } else {
+      setData((prevData) => [...prevData, newData]);
+    }
+    handleClose();
+  };
+
+  return (
+    <>
+      <Button variant="contained" onClick={handleClickOpen}>
+        Add Data
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add Data</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter your details below.
+          </DialogContentText>
+          <TextField
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Contact"
+            type="number"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit} disabled={!name || !email || !contact}>
+            {editItem ? 'Update' : 'Add'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
+
+export default DataForm;
